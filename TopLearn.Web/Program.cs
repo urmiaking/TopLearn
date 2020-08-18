@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using TopLearn.DataLayer.Context;
+using TopLearn.DataLayer.Extensions;
 
 namespace TopLearn.Web
 {
@@ -13,7 +15,7 @@ namespace TopLearn.Web
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            CreateHostBuilder(args).Build().MigrateDatabase<AppDbContext>().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

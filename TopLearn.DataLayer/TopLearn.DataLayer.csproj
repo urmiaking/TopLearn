@@ -5,8 +5,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Context\" />
-    <Folder Include="Entities\" />
+    <Compile Remove="Migrations\20200818213835_AddUsers.cs" />
+    <Compile Remove="Migrations\20200818213835_AddUsers.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.7">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="3.1.7" />
   </ItemGroup>
 
 </Project>
