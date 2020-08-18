@@ -36,6 +36,14 @@ namespace TopLearn.Web
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                //TODO: Add an error page
+                app.UseStatusCodePagesWithReExecute("/Error/{0}");
+                app.UseHsts();
+            }
+
+            app.UseHttpsRedirection();
 
             app.UseStaticFiles();
             app.UseRouting();
