@@ -14,5 +14,7 @@ namespace TopLearn.Core.Services.Interfaces
         Task<User> AddUserAsync(User user);
 
         Task<User> LoginUserAsync(LoginViewModel loginForm);
+
+        Task<bool> ActivateAccountAsync(string activationCode);
     }
 }

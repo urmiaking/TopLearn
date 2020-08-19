@@ -97,6 +97,16 @@ namespace TopLearn.Web.Controllers
 
         #endregion
 
+        #region Account Activation
+
+        public async Task<IActionResult> ActivateAccount(string id)
+        {
+            var isAccountActivated = await _userService.ActivateAccountAsync(id);
+            return View(isAccountActivated);
+        }
+
+        #endregion
+
         [HttpPost]
         [HttpGet]
         public async Task<IActionResult> IsEmailInUse(string email) =>
