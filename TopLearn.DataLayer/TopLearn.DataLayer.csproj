@@ -5,15 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20200818213835_AddUsers.cs" />
-    <Compile Remove="Migrations\20200818213835_AddUsers.Designer.cs" />
-    <Compile Remove="Migrations\20200818222555_AddUsers.cs" />
-    <Compile Remove="Migrations\20200818222555_AddUsers.Designer.cs" />
-    <Compile Remove="Migrations\20200819003843_AlterUsers.cs" />
-    <Compile Remove="Migrations\20200819003843_AlterUsers.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.7" />
