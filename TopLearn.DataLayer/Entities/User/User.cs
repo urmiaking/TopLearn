@@ -26,6 +26,7 @@ namespace TopLearn.DataLayer.Entities.User
 
         [Display(Name = "کلمه عبور")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
+        [MinLength(6, ErrorMessage = "{0} باید بیشتر از {1} کاراکتر باشد")]
         public string Password { get; set; }
 
         [Display(Name = "کد فعال سازی")]
