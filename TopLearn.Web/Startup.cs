@@ -9,6 +9,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using TopLearn.Core.Services;
+using TopLearn.Core.Services.Interfaces;
 using TopLearn.DataLayer.Context;
 
 namespace TopLearn.Web
@@ -28,6 +30,13 @@ namespace TopLearn.Web
             services.AddRazorPages();
             services.AddDbContext<AppDbContext>(options => 
                 options.UseSqlServer(Configuration.GetConnectionString("AppConnectionString")));
+
+            #region IoC
+
+            services.AddTransient<IUserService, UserService>();
+
+            #endregion
+
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

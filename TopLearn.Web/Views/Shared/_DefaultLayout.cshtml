@@ -2,7 +2,8 @@
 <html class="no-js" dir="rtl" lang="fa-IR">
 <head>
     <meta charset="UTF-8">
-    <title> تاپ لرن | @ViewBag.Title </title>
+    <title> تاپ لرن | @ViewData["Title"]</title>
+    <link rel="shortcut icon" type="image/ico" href="/favicon.ico" />
     <partial name="_MetaTags" />
     <partial name="_Styles" />
     <script src="/js/jquery.min.js"></script>
@@ -25,13 +26,13 @@
                 </div>
                 <div class="col-sm-6 col-xs-12">
                     <div class="clientarea">
-                        <div class="loggein">
+                        <div class="loggein hidden">
                             <i class="zmdi zmdi-account"></i><a href=""> مسعود خدادادی، خوش آمدی </a>
                         </div>
-                        <div class="signin hidden">
+                        <div class="signin">
                             <i class="zmdi zmdi-account"></i>
-                            <a href=""> ورود </a> /
-                            <a href=""> عضویت </a>
+                            <a asp-action="Login" asp-controller="Account"> ورود </a> /
+                            <a asp-action="Register" asp-controller="Account"> عضویت </a>
                         </div>
                     </div>
                 </div>
@@ -55,5 +56,6 @@
 
 <script src="/js/bootstrap.min.js"></script>
 <script src="/js/script.js"></script>
+@await RenderSectionAsync("Scripts", false)
 </body>
 </html>

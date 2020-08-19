@@ -1,18 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using Microsoft.AspNetCore.Mvc;
+using TopLearn.Core.Convertors;
 
-namespace TopLearn.DataLayer.Entities.User
+namespace TopLearn.Core.DTOs
 {
-    public class User
+    public class RegisterViewModel
     {
-        public User()
-        { }
-
-        public int Id { get; set; }
-
         [Display(Name = "نام و نام خانوادگی")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         [MaxLength(200, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
@@ -22,28 +18,16 @@ namespace TopLearn.DataLayer.Entities.User
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         [MaxLength(200, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
         [EmailAddress(ErrorMessage = "ایمیل وارد شده معتبر نیست")]
+        [Remote(areaName: "", action: "IsEmailInUse", controller: "Account")]
         public string Email { get; set; }
 
         [Display(Name = "کلمه عبور")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public string Password { get; set; }
 
-        [Display(Name = "کد فعال سازی")]
-        public string ActivationCode { get; set; }
-
-        [Display(Name = "وضعیت")]
-        public bool IsActive { get; set; }
-
-        [Display(Name = "آواتار")]
-        public string Avatar { get; set; }
-
-        [Display(Name = "تاریخ ثبت نام")]
-        public DateTime RegisterDate { get; set; }
-
-        #region Relations
-
-        public virtual List<UserRole> UserRoles { get; set; }
-
-        #endregion
+        [Display(Name = "تکرار کلمه عبور")]
+        [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
+        [Compare("Password", ErrorMessage = "{0} با {1} مطابقت ندارد")]
+        public string RepeatPassword { get; set; }
     }
 }

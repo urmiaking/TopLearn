@@ -34,4 +34,8 @@
     <ProjectReference Include="..\TopLearn.DataLayer\TopLearn.DataLayer.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\images\avatars\" />
+  </ItemGroup>
+
 </Project>

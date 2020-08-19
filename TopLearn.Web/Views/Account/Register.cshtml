@@ -1,0 +1,62 @@
+﻿@model TopLearn.Core.DTOs.RegisterViewModel
+@{
+    ViewData["Title"] = "ثبت نام";
+}
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">تاپ لرن</a></li>
+            <li class="breadcrumb-item active" aria-current="page">عضویت در سایت</li>
+        </ul>
+    </nav>
+</div>
+
+<main class="client-page">
+    <div class="container-content">
+
+        <header><h2> عضویت در سایت </h2></header>
+
+        <div class="form-layer">
+
+            <form asp-action="Register" method="post">
+
+                <div class="input-group">
+                    <span class="input-group-addon" id="name"><i class="zmdi zmdi-account"></i></span>
+                    <input asp-for="Name" type="text" class="form-control" placeholder="نام و نام خانوادگی" aria-describedby="name">
+                </div>
+                <span class="text-danger" asp-validation-for="Name"></span>
+
+                <div class="input-group">
+                    <span class="input-group-addon" id="email-address"><i class="zmdi zmdi-email"></i></span>
+                    <input asp-for="Email" type="email" class="form-control" placeholder="ایمیل" aria-describedby="email-address">
+                </div>
+                <span class="text-danger" asp-validation-for="Email"></span>
+
+                <div class="input-group">
+                    <span class="input-group-addon" id="password"><i class="zmdi zmdi-lock"></i></span>
+                    <input asp-for="Password" type="password" class="form-control" placeholder="رمز عبور " aria-describedby="password">
+                </div>
+                <span class="text-danger" asp-validation-for="Password"></span>
+
+                <div class="input-group">
+                    <span class="input-group-addon" id="repeat-password"><i class="zmdi zmdi-lock"></i></span>
+                    <input asp-for="RepeatPassword" type="password" class="form-control" placeholder="تکرار رمز عبور " aria-describedby="repeat-password">
+                </div>
+                <span class="text-danger" asp-validation-for="RepeatPassword"></span>
+
+                <div class="link">
+                    <a asp-controller="Account" asp-action="Login"> <i class="zmdi zmdi-account"></i> ورود به سایت </a>
+                </div>
+
+                <button type="submit" class="btn btn-success"> عضویت در سایت </button>
+
+            </form>
+        </div>
+
+    </div>
+</main>
+
+@section Scripts {
+    <script src="/js/jquery.validate.min.js"></script>
+    <script src="/js/jquery.validate.unobtrusive.min.js"></script>
+}
