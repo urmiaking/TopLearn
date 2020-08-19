@@ -1,7 +1,6 @@
 ﻿<!DOCTYPE html>
 <html class="no-js" dir="rtl" lang="fa-IR">
 <head>
-    <meta charset="UTF-8">
     <title> تاپ لرن | @ViewData["Title"]</title>
     <link rel="shortcut icon" type="image/ico" href="/favicon.ico" />
     <partial name="_MetaTags" />
@@ -54,8 +53,6 @@
 <partial name="_Footer" />
 <!-- /footer -->
 
-<script src="/js/bootstrap.min.js"></script>
-<script src="/js/script.js"></script>
-@await RenderSectionAsync("Scripts", false)
+<partial name="_Scripts"/>
 </body>
 </html>

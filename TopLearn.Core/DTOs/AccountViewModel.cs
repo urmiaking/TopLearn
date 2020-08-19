@@ -31,4 +31,21 @@ namespace TopLearn.Core.DTOs
         [Compare("Password", ErrorMessage = "{0} با {1} مطابقت ندارد")]
         public string RepeatPassword { get; set; }
     }
+
+    public class LoginViewModel
+    {
+        [Display(Name = "ایمیل")]
+        [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
+        [MaxLength(200, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
+        [EmailAddress(ErrorMessage = "ایمیل وارد شده معتبر نیست")]
+        public string Email { get; set; }
+
+        [Display(Name = "کلمه عبور")]
+        [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
+        [MinLength(6, ErrorMessage = "{0} باید بیشتر از {1} کاراکتر باشد")]
+        public string Password { get; set; }
+
+        [Display(Name = "مرا به خاطر بسپار")]
+        public bool RememberMe { get; set; }
+    }
 }

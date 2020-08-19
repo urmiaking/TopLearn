@@ -45,19 +45,61 @@ namespace TopLearn.Web.Controllers
                 RegisterDate = DateTime.Now,
                 ActivationCode = Generator.GenerationUniqueName(),
                 Password = PasswordHelper.Hash(registerForm.Password),
-                Avatar = "default-avatar.png",
+                Avatar = "default-avatar.png"
             };
 
             await _userService.AddUserAsync(user);
+
+            //TODO: implement email functionality
 
             return View("SuccessRegister", user);
         }
 
         #endregion
 
+        #region Login
+
+        [Route("/Login")]
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Route("/Login")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(LoginViewModel loginForm)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(loginForm);
+            }
+
+            var user = await _userService.LoginUserAsync(loginForm);
+
+            if (user == null)
+            {
+                TempData["Error"] = "نام کاربری یا رمز عبور اشتباه است";
+                return View(loginForm);
+            }
+
+            if (!user.IsActive)
+            {
+                TempData["Error"] = "حساب کاربری شما هنوز فعال نشده است";
+                return View(loginForm);
+            }
+            
+            //TODO: Authenticate user
+
+            TempData["Success"] = $"{user.Name} عزیز خوش آمدید";
+            return RedirectToAction("Index", "Home");
+        }
+
+        #endregion
+
         [HttpPost]
         [HttpGet]
-        public async Task<IActionResult> IsEmailInUse(string email) => 
+        public async Task<IActionResult> IsEmailInUse(string email) =>
             await _userService.IsEmailExistAsync(email)
                 ? Json($"ایمیل {email} قبلا استفاده شده است")
                 : Json(true);
