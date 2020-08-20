@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using TopLearn.DataLayer.Entities.Mail;
+using TopLearn.Core.DTOs;
 
 namespace TopLearn.Core.Services.Interfaces
 {

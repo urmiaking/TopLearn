@@ -12,7 +12,6 @@ using TopLearn.Core.DTOs;
 using TopLearn.Core.Generators;
 using TopLearn.Core.Security;
 using TopLearn.Core.Services.Interfaces;
-using TopLearn.DataLayer.Entities.Mail;
 using TopLearn.DataLayer.Entities.User;
 
 namespace TopLearn.Web.Controllers

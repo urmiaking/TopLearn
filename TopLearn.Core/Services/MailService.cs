@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
+using TopLearn.Core.DTOs;
 using TopLearn.Core.Services.Interfaces;
 using TopLearn.DataLayer.Context;
-using TopLearn.DataLayer.Entities.Mail;
 
 namespace TopLearn.Core.Services
 {

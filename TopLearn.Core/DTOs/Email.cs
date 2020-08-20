@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace TopLearn.DataLayer.Entities.Mail
+namespace TopLearn.Core.DTOs
 {
     public class Email
     {
