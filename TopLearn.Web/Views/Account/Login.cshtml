@@ -20,6 +20,8 @@
         <div class="form-layer">
 
             <form asp-action="Login" method="post">
+                
+                <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
 
                 <div class="input-group">
                     <span class="input-group-addon" id="email-address"><i class="zmdi zmdi-email"></i></span>
@@ -34,7 +36,7 @@
                 <span asp-validation-for="Password"></span>
 
                 <div class="remember-me">
-                    <label><input asp-for="RememberMe" type="checkbox" name="">  مرا بخاطر بسپار </label>
+                    <label><input asp-for="RememberMe" type="checkbox">  مرا بخاطر بسپار </label>
                 </div>
 
                 <div class="link">

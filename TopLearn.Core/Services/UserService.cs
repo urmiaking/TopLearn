@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -29,24 +30,37 @@ namespace TopLearn.Core.Services
             return user;
         }
 
-        public async Task<User> LoginUserAsync(LoginViewModel loginForm) =>
-            await _db.Users.FirstOrDefaultAsync(a =>
-                a.Email.Equals(OptimizeText.OptimizeEmail(loginForm.Email)) &&
-                a.Password.Equals(PasswordHelper.Hash(loginForm.Password)));
+        public async Task<User> LoginUserAsync(LoginViewModel loginForm)
+        {
+            return await _db.Users.FirstOrDefaultAsync(a =>
+                            a.Email.Equals(OptimizeText.OptimizeEmail(loginForm.Email)) &&
+                            a.Password.Equals(PasswordHelper.Hash(loginForm.Password)));
+        }
+
 
         public async Task<bool> ActivateAccountAsync(string activationCode)
         {
+            if (string.IsNullOrWhiteSpace(activationCode))
+                return false;
+
             var user = await _db.Users.FirstOrDefaultAsync(u => u.ActivationCode.Equals(activationCode));
 
             if (user == null || user.IsActive)
-            {
                 return false;
-            }
 
             user.IsActive = true;
             user.ActivationCode = Generator.GenerationUniqueName();
 
-            //TODO: Update user in database
+            try
+            {
+                _db.Users.Update(user);
+                await _db.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw new DbUpdateConcurrencyException();
+            }
 
             return true;
         }

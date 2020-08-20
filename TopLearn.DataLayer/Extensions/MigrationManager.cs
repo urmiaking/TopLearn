@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using TopLearn.DataLayer.Entities.Mail;
 
 namespace TopLearn.DataLayer.Extensions
 {
@@ -26,6 +27,19 @@ namespace TopLearn.DataLayer.Extensions
             }
 
             return host;
+        }
+
+        public static void Seed(this ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<MailServer>()
+                .HasData(new MailServer()
+                {
+                    Id = 1,
+                    ServerAddress = "masoud.xpress@gmail.com",
+                    Password = "MASOUD7559",
+                    Port = 587,
+                    Host = "smtp.gmail.com"
+                });
         }
     }
 }

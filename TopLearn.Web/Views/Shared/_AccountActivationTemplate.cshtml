@@ -1,0 +1,12 @@
+﻿@model EmailTemplateViewModel
+@{
+    Layout = null;
+}
+
+<div style="direction: rtl; padding: 20px; justify-content: center">
+    <h2>@Model.Name عزیز !</h2>
+    <p>با تشکر از ثبت نام شما در تاپ لرن ، جهت ادامه کار باید با استفاده از لینک زیر حساب کاربری خود را فعال کنید</p>
+    <p>
+        <a href="@Model.Url">فعالسازی حساب کاربری</a>
+    </p>
+</div>

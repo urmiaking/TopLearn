@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using TopLearn.Core.Convertors;
 using TopLearn.Core.DTOs;
 using TopLearn.Core.Generators;
 using TopLearn.Core.Security;
 using TopLearn.Core.Services.Interfaces;
+using TopLearn.DataLayer.Entities.Mail;
 using TopLearn.DataLayer.Entities.User;
 
 namespace TopLearn.Web.Controllers
@@ -15,10 +20,14 @@ namespace TopLearn.Web.Controllers
     public class AccountController : Controller
     {
         private readonly IUserService _userService;
+        private readonly IViewRenderService _viewRenderService;
+        private readonly IMailService _mailService;
 
-        public AccountController(IUserService userService)
+        public AccountController(IUserService userService, IViewRenderService viewRenderService, IMailService mailService)
         {
             _userService = userService;
+            _viewRenderService = viewRenderService;
+            _mailService = mailService;
         }
 
         #region Register
@@ -50,7 +59,32 @@ namespace TopLearn.Web.Controllers
 
             await _userService.AddUserAsync(user);
 
-            //TODO: implement email functionality
+            #region Send Account Activation Email
+
+            var emailTemplateViewModel = new EmailTemplateViewModel()
+            {
+                Name = user.Name,
+                Url = string.Concat(Request.Scheme, "://", Request.Host.ToUriComponent(), $"/Account/ActivateAccount/{user.ActivationCode}")
+            };
+
+            var body = await _viewRenderService.RenderToStringAsync("_AccountActivationTemplate", emailTemplateViewModel);
+
+            var email = new Email()
+            {
+                To = user.Email,
+                Subject = "فعال سازی حساب کاربری - تاپ لرن",
+                Body = body
+            };
+
+            var emailSuccessfullySent = await _mailService.SendEmailAsync(email);
+
+            if (!emailSuccessfullySent)
+            {
+                TempData["Error"] = "مشکلی پیش آمد، لطفا مجددا امتحان کنید";
+                return View(registerForm);
+            }
+
+            #endregion
 
             return View("SuccessRegister", user);
         }
@@ -60,15 +94,16 @@ namespace TopLearn.Web.Controllers
         #region Login
 
         [Route("/Login")]
-        public IActionResult Login()
+        public IActionResult Login(string returnUrl)
         {
+            ViewBag.ReturnUrl = returnUrl;
             return View();
         }
 
         [HttpPost]
         [Route("/Login")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginViewModel loginForm)
+        public async Task<IActionResult> Login(LoginViewModel loginForm, string returnUrl)
         {
             if (!ModelState.IsValid)
             {
@@ -88,10 +123,46 @@ namespace TopLearn.Web.Controllers
                 TempData["Error"] = "حساب کاربری شما هنوز فعال نشده است";
                 return View(loginForm);
             }
-            
-            //TODO: Authenticate user
+
+            /* ----- Creating Cookies ----- */
+            var claims = new List<Claim>()
+            {
+                new Claim(ClaimTypes.Name, user.Email),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.GivenName, user.Name)
+            };
+            var claimIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var authProperties = new AuthenticationProperties()
+            {
+                IsPersistent = loginForm.RememberMe,
+                ExpiresUtc = DateTimeOffset.Now.AddMinutes(43200)
+            };
+
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(claimIdentity), authProperties);
 
             TempData["Success"] = $"{user.Name} عزیز خوش آمدید";
+
+            var decodedUrl = "";
+            if (!string.IsNullOrEmpty(returnUrl))
+                decodedUrl = WebUtility.UrlDecode(returnUrl);
+
+            if (Url.IsLocalUrl(decodedUrl))
+            {
+                return Redirect(decodedUrl);
+            }
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        #endregion
+
+        #region Logout
+
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Index", "Home");
         }
 
@@ -99,13 +170,12 @@ namespace TopLearn.Web.Controllers
 
         #region Account Activation
 
-        public async Task<IActionResult> ActivateAccount(string id)
-        {
-            var isAccountActivated = await _userService.ActivateAccountAsync(id);
-            return View(isAccountActivated);
-        }
+        public async Task<IActionResult> ActivateAccount(string id) =>
+            View(await _userService.ActivateAccountAsync(id));
 
         #endregion
+
+        #region Remote Validation
 
         [HttpPost]
         [HttpGet]
@@ -113,5 +183,7 @@ namespace TopLearn.Web.Controllers
             await _userService.IsEmailExistAsync(email)
                 ? Json($"ایمیل {email} قبلا استفاده شده است")
                 : Json(true);
+
+        #endregion
     }
 }
