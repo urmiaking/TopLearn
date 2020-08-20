@@ -24,5 +24,9 @@ namespace TopLearn.Core.Services.Interfaces
         Task<bool> ResetPasswordAsync(ResetPasswordViewModel resetPasswordViewModel);
 
         Task<bool> UpdateUserAsync(User user);
+
+        Task<UserProfileViewModel> GetUserProfileByEmailAsync(string email);
+
+        Task<UserSidebarViewModel> GetSidebarDataByEmailAsync(string email);
     }
 }

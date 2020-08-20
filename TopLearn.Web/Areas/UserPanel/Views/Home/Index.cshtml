@@ -1,0 +1,41 @@
+﻿@model UserProfileViewModel
+@{
+    ViewData["Title"] = $"پنل کاربری {User.FindFirst(ClaimTypes.GivenName).Value}";
+}
+
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">تاپ لرن</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+        </ul>
+    </nav>
+</div>
+
+<main>
+    <div class="container">
+        <div class="user-account">
+            <div class="row">
+                @await Component.InvokeAsync("Sidebar")
+                <div class="col-md-9 col-sm-8 col-xs-12">
+                    <section class="user-account-content">
+                        <header>
+                            <h1> داشبورد </h1>
+                        </header>
+                        <div class="inner">
+                            <div class="account-information">
+                                <h3> اطلاعات کاربری </h3>
+                                <ul>
+                                    <li> <i class="zmdi zmdi-account"></i> نام و نام خانوادگی : @Model.Name </li>
+                                    <li> <i class="zmdi zmdi-email"></i> ایمیل : @Model.Email </li>
+                                    <li> <i class="zmdi zmdi-calendar-check"></i> تاریخ عضویت : @Model.RegisterDate.ToPersianDateString() </li>
+                                    <li> <i class="zmdi zmdi-balance-wallet"></i> موجودی کیف پول : @Model.WalletBalance ریال </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

@@ -37,7 +37,6 @@ namespace TopLearn.Core.Services
                             a.Password.Equals(PasswordHelper.Hash(loginForm.Password)));
         }
 
-
         public async Task<bool> ActivateAccountAsync(string activationCode)
         {
             if (string.IsNullOrWhiteSpace(activationCode))
@@ -91,6 +90,46 @@ namespace TopLearn.Core.Services
                 Console.WriteLine(e);
                 return false;
             }
+        }
+
+        public async Task<UserProfileViewModel> GetUserProfileByEmailAsync(string email)
+        {
+            var user = await GetUserByEmailAsync(email);
+
+            if (user == null)
+            {
+                return null;
+            }
+
+            var profile = new UserProfileViewModel()
+            {
+                Avatar = user.Avatar,
+                Email = user.Email,
+                Name = user.Name,
+                RegisterDate = user.RegisterDate,
+                WalletBalance = 0
+            };
+
+            return profile;
+        }
+
+        public async Task<UserSidebarViewModel> GetSidebarDataByEmailAsync(string email)
+        {
+            var user = await GetUserByEmailAsync(email);
+
+            if (user == null)
+            {
+                return null;
+            }
+
+            var sidebar = new UserSidebarViewModel()
+            {
+                Avatar = user.Avatar,
+                Name = user.Name,
+                RegisterDate = user.RegisterDate
+            };
+
+            return sidebar;
         }
     }
 }
