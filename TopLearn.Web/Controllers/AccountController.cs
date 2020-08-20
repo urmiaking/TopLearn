@@ -63,16 +63,15 @@ namespace TopLearn.Web.Controllers
             var emailTemplateViewModel = new EmailTemplateViewModel()
             {
                 Name = user.Name,
-                Url = string.Concat(Request.Scheme, "://", Request.Host.ToUriComponent(), $"/Account/ActivateAccount/{user.ActivationCode}")
+                Url = string.Concat(Request.Scheme, "://", Request.Host.ToUriComponent(), 
+                          $"/Account/ActivateAccount/{user.ActivationCode}")
             };
-
-            var body = await _viewRenderService.RenderToStringAsync("_AccountActivationTemplate", emailTemplateViewModel);
 
             var email = new Email()
             {
                 To = user.Email,
                 Subject = "فعال سازی حساب کاربری - تاپ لرن",
-                Body = body
+                Body = await _viewRenderService.RenderToStringAsync("_AccountActivationTemplate", emailTemplateViewModel)
             };
 
             var emailSuccessfullySent = await _mailService.SendEmailAsync(email);
@@ -171,6 +170,121 @@ namespace TopLearn.Web.Controllers
 
         public async Task<IActionResult> ActivateAccount(string id) =>
             View(await _userService.ActivateAccountAsync(id));
+
+        #endregion
+
+        #region Forget Password
+
+        [Route("/ForgetPassword")]
+        public IActionResult ForgetPassword() => View();
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("/ForgetPassword")]
+        public async Task<IActionResult> ForgetPassword(ForgetPasswordViewModel forgetPasswordForm)
+        {
+            if (!ModelState.IsValid)
+                return View(forgetPasswordForm);
+
+
+            var user = await _userService.GetUserByEmailAsync(OptimizeText.OptimizeEmail(forgetPasswordForm.Email));
+
+            if (user == null)
+            {
+                TempData["Error"] = "کاربری با ایمیل وارد شده وجود ندارد";
+                return View(forgetPasswordForm);
+            }
+
+            if (user.IsActive.Equals(false))
+            {
+                TempData["Error"] = "حساب کاربری غیر فعال است";
+                return View(forgetPasswordForm);
+            }
+
+            var forgetPasswordViewModel = new ForgetPasswordTemplateViewModel()
+            {
+                Name = user.Name,
+                Url = string.Concat(Request.Scheme, "://", Request.Host.ToUriComponent(),
+                         $"/Account/ResetPassword/{user.ActivationCode}")
+            };
+
+            var email = new Email()
+            {
+                To = user.Email,
+                Subject = "بازیابی کلمه عبور - تاپ لرن",
+                Body = await _viewRenderService.RenderToStringAsync("_ForgetPasswordTemplate", forgetPasswordViewModel)
+            };
+
+            var emailSuccessfullySent = await _mailService.SendEmailAsync(email);
+
+            if (!emailSuccessfullySent)
+            {
+                TempData["Error"] = "مشکلی پیش آمد، لطفا مجددا امتحان کنید";
+                return View(forgetPasswordForm);
+            }
+
+            return View("SuccessForgetPasswordSent", user);
+        }
+
+        #endregion
+
+        #region Reset Password
+
+        public async Task<IActionResult> ResetPassword(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return NotFound();
+            }
+
+            var user = await _userService.GetUserByActivationCodeAsync(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            if (!user.IsActive)
+            {
+                TempData["Error"] = "حساب کاربری شما غیر فعال است";
+                return RedirectToAction("Login", "Account");
+            }
+
+            var resetPasswordViewModel = new ResetPasswordViewModel()
+            {
+                ActivationCode = id
+            };
+
+            return View(resetPasswordViewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel resetPasswordViewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(resetPasswordViewModel);
+            }
+
+            var user = await _userService.GetUserByActivationCodeAsync(resetPasswordViewModel.ActivationCode);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var passwordChanged = await _userService.ResetPasswordAsync(resetPasswordViewModel);
+
+            if (!passwordChanged)
+            {
+                TempData["Error"] = "مشکلی پیش آمد. لطفا بعدا امتحان کنید";
+                return RedirectToAction("Login", "Account");
+            }
+
+            TempData["Success"] = "کلمه عبور شما با موفقیت تغییر یافت!";
+            return RedirectToAction("Login", "Account");
+        }
 
         #endregion
 

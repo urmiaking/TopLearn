@@ -51,22 +51,46 @@ namespace TopLearn.Core.Services
             user.IsActive = true;
             user.ActivationCode = Generator.GenerationUniqueName();
 
-            try
-            {
-                _db.Users.Update(user);
-                await _db.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw new DbUpdateConcurrencyException();
-            }
-
-            return true;
+            return await UpdateUserAsync(user);
         }
+
+        public async Task<User> GetUserByEmailAsync(string email) =>
+            await _db.Users.FirstOrDefaultAsync(u => u.Email.Equals(email));
 
         public async Task<bool> IsEmailExistAsync(string email) =>
             await _db.Users.AnyAsync(user =>
                 user.Email.Equals(email));
+
+        public async Task<User> GetUserByActivationCodeAsync(string activationCode) =>
+            await _db.Users.FirstOrDefaultAsync(u => u.ActivationCode.Equals(activationCode));
+
+        public async Task<bool> ResetPasswordAsync(ResetPasswordViewModel resetPasswordViewModel)
+        {
+            var user = await _db.Users.FirstOrDefaultAsync(u =>
+                u.ActivationCode.Equals(resetPasswordViewModel.ActivationCode));
+
+            if (user == null || !user.IsActive)
+                return false;
+
+            user.Password = PasswordHelper.Hash(resetPasswordViewModel.Password);
+            user.ActivationCode = Generator.GenerationUniqueName();
+
+            return await UpdateUserAsync(user);
+        }
+
+        public async Task<bool> UpdateUserAsync(User user)
+        {
+            try
+            {
+                _db.Users.Update(user);
+                await _db.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return false;
+            }
+        }
     }
 }
