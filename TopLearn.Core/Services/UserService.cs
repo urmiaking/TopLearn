@@ -244,5 +244,26 @@ namespace TopLearn.Core.Services
         {
             await _httpContextAccessor.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         }
+
+        public async Task<bool> ChangePasswordAsync(ChangePasswordViewModel passwordForm, string email)
+        {
+            var user = await GetUserByEmailAsync(email);
+
+            if (user == null)
+            {
+                return false;
+            }
+
+            var currentHashedPassword = PasswordHelper.Hash(passwordForm.CurrentPassword);
+
+            if (!currentHashedPassword.Equals(user.Password))
+            {
+                return false;
+            }
+
+            user.Password = PasswordHelper.Hash(passwordForm.NewPassword);
+            await UpdateUserAsync(user);
+            return true;
+        }
     }
 }

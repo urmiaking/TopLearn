@@ -9,6 +9,16 @@ namespace TopLearn.Core.Services.Interfaces
 {
     public interface IUserService
     {
+        #region User Getter
+
+        Task<User> GetUserByEmailAsync(string email);
+
+        Task<User> GetUserByActivationCodeAsync(string activationCode);
+
+        #endregion
+
+        #region Account
+
         Task<bool> IsEmailExistAsync(string email);
 
         Task<User> AddUserAsync(User user);
@@ -17,13 +27,21 @@ namespace TopLearn.Core.Services.Interfaces
 
         Task<bool> ActivateAccountAsync(string activationCode);
 
-        Task<User> GetUserByEmailAsync(string email);
-
-        Task<User> GetUserByActivationCodeAsync(string activationCode);
-
         Task<bool> ResetPasswordAsync(ResetPasswordViewModel resetPasswordViewModel);
 
         Task<bool> UpdateUserAsync(User user);
+
+        #endregion
+
+        #region Cookie
+
+        Task CreateCookieAsync(ClaimViewModel claim);
+
+        Task DeleteCookieAsync();
+
+        #endregion
+
+        #region User Panel
 
         Task<UserProfileViewModel> GetUserProfileByEmailAsync(string email);
 
@@ -33,8 +51,8 @@ namespace TopLearn.Core.Services.Interfaces
 
         Task<bool> EditUserProfileAsync(EditProfileViewModel profile);
 
-        Task CreateCookieAsync(ClaimViewModel claim);
+        Task<bool> ChangePasswordAsync(ChangePasswordViewModel passwordForm, string email);
 
-        Task DeleteCookieAsync();
+        #endregion
     }
 }
