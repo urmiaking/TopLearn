@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using Microsoft.AspNetCore.Http;
 
 namespace TopLearn.Core.DTOs
 {
@@ -33,5 +34,26 @@ namespace TopLearn.Core.DTOs
 
         [Display(Name = "تاریخ ثبت نام")]
         public DateTime RegisterDate { get; set; }
+    }
+
+    public class EditProfileViewModel
+    {
+        [Display(Name = "نام و نام خانوادگی")]
+        [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
+        [MaxLength(200, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
+        public string Name { get; set; }
+
+        [Display(Name = "ایمیل")]
+        [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
+        [MaxLength(200, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
+        [EmailAddress(ErrorMessage = "ایمیل وارد شده معتبر نیست")]
+        //TODO: Add remote validation
+        public string Email { get; set; }
+
+        public IFormFile ImageFile { get; set; }
+
+        [Display(Name = "آواتار")]
+        public string ImageName { get; set; }
+
     }
 }

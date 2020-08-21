@@ -28,5 +28,13 @@ namespace TopLearn.Core.Services.Interfaces
         Task<UserProfileViewModel> GetUserProfileByEmailAsync(string email);
 
         Task<UserSidebarViewModel> GetSidebarDataByEmailAsync(string email);
+
+        Task<EditProfileViewModel> GetEditProfileDataByEmailAsync(string email);
+
+        Task<bool> EditUserProfileAsync(EditProfileViewModel profile);
+
+        Task CreateCookieAsync(ClaimViewModel claim);
+
+        Task DeleteCookieAsync();
     }
 }

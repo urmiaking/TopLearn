@@ -1,0 +1,89 @@
+﻿@model EditProfileViewModel
+@{
+    ViewData["Title"] = "ویرایش حساب کاربری";
+}
+
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">تاپ لرن</a></li>
+            <li class="breadcrumb-item active" aria-current="page"> @ViewData["Title"] </li>
+        </ul>
+    </nav>
+</div>
+
+<main>
+    <div class="container">
+        <div class="user-account">
+            <div class="row">
+                @await Component.InvokeAsync("Sidebar")
+                <div class="col-md-9 col-sm-8 col-xs-12">
+                    <section class="user-account-content">
+                        <header>
+                            <h1> ویرایش حساب کاربری </h1>
+                        </header>
+                        <div class="inner form-layer">
+                            <form asp-action="EditProfile" method="post" enctype="multipart/form-data">
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="input-group">
+                                            <span class="input-group-addon" id="name"><i class="zmdi zmdi-account"></i></span>
+                                            <input asp-for="Name" type="text" class="form-control" placeholder="نام و نام خانوادگی" aria-describedby="name">
+                                        </div>
+                                        <span asp-validation-for="Name"></span>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="input-group">
+                                            <span class="input-group-addon" id="email-address"><i class="zmdi zmdi-email"></i></span>
+                                            <input asp-for="Email" type="text" class="form-control" placeholder="ایمیل" aria-describedby="email-address">
+                                        </div>
+                                        <span asp-validation-for="Email"></span>
+                                    </div>
+                                    <br/>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <input asp-for="ImageName" type="hidden"/>
+                                            <label asp-for="ImageName" class="control-label"></label>
+                                            <input asp-for="ImageFile" type="file" accept="image/x-png,image/gif,image/jpeg"
+                                                   class="form-control dropify"
+                                                   data-default-file="/../../images/avatars/@Model.ImageName"/>
+                                            <span asp-validation-for="ImageName" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-7 col-sm-8 col-xs-12">
+                                        <button class="btn btn-success"> ویرایش اطلاعات </button>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+@section Styles
+{
+    <link rel="stylesheet" type="text/css" href="/lib/fileuploads/css/dropify.min.css">
+}
+
+@section Scripts 
+{
+    <script src="/lib/fileuploads/js/dropify.min.js"></script>
+    <script type="text/javascript">
+        $('.dropify').dropify({
+            messages: {
+                'default': 'فایل را به اینجا بکشید یا کلیک کنید',
+                'replace': 'برای جایگزینی فایل را به اینجا بکشید یا کلیک کنید',
+                'remove': 'پاک کردن',
+                'error': 'با پوزش فراوان، خطایی رخ داده'
+            },
+            error: {
+                'fileSize': 'حجم فایل بیشتر از حد مجاز است (1M).'
+            }
+        });
+    </script>
+}

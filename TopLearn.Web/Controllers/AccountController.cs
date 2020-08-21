@@ -123,22 +123,14 @@ namespace TopLearn.Web.Controllers
             }
 
             /* ----- Creating Cookies ----- */
-            var claims = new List<Claim>()
+            var claims = new ClaimViewModel()
             {
-                new Claim(ClaimTypes.Name, user.Email),
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.GivenName, user.Name)
-            };
-            var claimIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            var authProperties = new AuthenticationProperties()
-            {
-                IsPersistent = loginForm.RememberMe,
-                ExpiresUtc = DateTimeOffset.Now.AddMinutes(43200)
+                Email = user.Email,
+                Name = user.Name,
+                RememberMe = loginForm.RememberMe
             };
 
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
-                new ClaimsPrincipal(claimIdentity), authProperties);
+            await _userService.CreateCookieAsync(claims);
 
             TempData["Success"] = $"{user.Name} عزیز خوش آمدید";
 
@@ -160,7 +152,7 @@ namespace TopLearn.Web.Controllers
 
         public async Task<IActionResult> Logout()
         {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            await _userService.DeleteCookieAsync();
             return RedirectToAction("Index", "Home");
         }
 

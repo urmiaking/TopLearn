@@ -5,6 +5,7 @@
     <link rel="shortcut icon" type="image/ico" href="/favicon.ico" />
     <partial name="_MetaTags" />
     <partial name="_Styles" />
+    @await RenderSectionAsync("Styles", false)
     <script src="/js/jquery.min.js"></script>
 </head>
 <body>
@@ -35,7 +36,7 @@
                                  @User.FindFirst(ClaimTypes.GivenName).Value
                             </a>
                             /
-                            <a asp-action="Logout" asp-controller="Account"> خروج </a>
+                            <a asp-area="" asp-action="Logout" asp-controller="Account"> خروج </a>
                         </div>
                         }
                         else
@@ -67,5 +68,6 @@
 <!-- /footer -->
 
 <partial name="_Scripts"/>
+@await RenderSectionAsync("Scripts", false)
 </body>
 </html>
