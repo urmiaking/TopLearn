@@ -1,0 +1,82 @@
+﻿@model TransactionViewModel
+@{
+    ViewData["Title"] = "کیف پول شما";
+}
+
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">تاپ لرن</a></li>
+            <li class="breadcrumb-item active" aria-current="page"> @ViewData["Title"] </li>
+        </ul>
+    </nav>
+</div>
+
+<main>
+    <div class="container">
+        <div class="user-account">
+            <div class="row">
+                @await Component.InvokeAsync("Sidebar")
+                <div class="col-md-9 col-sm-8 col-xs-12">
+                    <section class="user-account-content">
+                        <header>
+                            <h1> شارژ کیف پول </h1>
+                        </header>
+                        <div class="inner form-layer">
+                            <form asp-action="Index" method="post">
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="input-group">
+                                            <span class="input-group-addon" id="amount"><i class="zmdi zmdi-balance-wallet"></i></span>
+                                            <input asp-for="ChargeWallet.Amount" type="number" class="form-control" placeholder="مبلغ (به تومان)" aria-describedby="amount">
+                                        </div>
+                                        <span asp-validation-for="ChargeWallet.Amount"></span>
+                                    </div>
+                                    <br />
+                                    <br />
+                                    <br />
+
+                                    <div class="col-md-7 col-sm-8 col-xs-12">
+                                        <button class="btn btn-success">شارژ</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <hr />
+                            <table class="table table-bordered">
+                                <tr>
+                                    <th>مبلغ</th>
+                                    <th>تاریخ</th>
+                                    <th>نوع تراکنش</th>
+                                    <th>شرح</th>
+                                </tr>
+                                @foreach (var item in Model.TransactionsList)
+                                {
+                                    <tr>
+                                        <td>@item.Amount.ToString("#,0 تومان")</td>
+                                        <td>
+                                            @item.TransactionDateTime.ToPersianDigitalDateTimeString()
+                                        </td>
+                                        <td>
+                                            @if (item.TransactionType.Equals(TransactionType.Deposit))
+                                            {
+                                                <p class="text-success">واریز به حساب</p>
+                                            }
+                                            else
+                                            {
+                                                <p class="text-danger">برداشت از حساب</p>
+                                            }
+                                        </td>
+                                        <td>
+                                            @item.Description
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TopLearn.Core.DTOs;
 using TopLearn.DataLayer.Entities.User;
+using TopLearn.DataLayer.Entities.Wallet;
 
 namespace TopLearn.Core.Services.Interfaces
 {
@@ -52,6 +53,18 @@ namespace TopLearn.Core.Services.Interfaces
         Task<bool> EditUserProfileAsync(EditProfileViewModel profile);
 
         Task<bool> ChangePasswordAsync(ChangePasswordViewModel passwordForm, string email);
+
+        #endregion
+
+        #region Wallet
+
+        Task<int> GetUserWalletBalanceAsync(string email);
+
+        Task<TransactionViewModel> GetUserTransactionViewModelAsync(string email);
+
+        Task ChargeUserWallet(string email, int amount, string description, bool isPaid = false);
+
+        Task AddTransactionAsync(Transaction transaction);
 
         #endregion
     }

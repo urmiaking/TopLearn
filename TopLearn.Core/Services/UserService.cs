@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,7 @@ using TopLearn.Core.Security;
 using TopLearn.Core.Services.Interfaces;
 using TopLearn.DataLayer.Context;
 using TopLearn.DataLayer.Entities.User;
+using TopLearn.DataLayer.Entities.Wallet;
 
 namespace TopLearn.Core.Services
 {
@@ -114,7 +116,7 @@ namespace TopLearn.Core.Services
                 Email = user.Email,
                 Name = user.Name,
                 RegisterDate = user.RegisterDate,
-                WalletBalance = 0
+                WalletBalance = await GetUserWalletBalanceAsync(email)
             };
 
             return profile;
@@ -264,6 +266,79 @@ namespace TopLearn.Core.Services
             user.Password = PasswordHelper.Hash(passwordForm.NewPassword);
             await UpdateUserAsync(user);
             return true;
+        }
+
+        public async Task<int> GetUserWalletBalanceAsync(string email)
+        {
+            var user = await GetUserByEmailAsync(email);
+
+            var deposits = await _db.Transactions
+                .Where(t =>
+                    t.UserId.Equals(user.Id) && 
+                    t.IsPaid &&
+                    t.TransactionType.Equals(TransactionType.Deposit))
+                .SumAsync(t => t.Amount);
+
+            var withDraws = await _db.Transactions
+                .Where(t =>
+                    t.UserId.Equals(user.Id) && 
+                    t.IsPaid &&
+                    t.TransactionType.Equals(TransactionType.WithDraw))
+                .SumAsync(t => t.Amount);
+
+            var balance = deposits - withDraws;
+
+            return balance < 0 ? int.MinValue : balance;
+        }
+
+        public async Task<TransactionViewModel> GetUserTransactionViewModelAsync(string email)
+        {
+            var user = await GetUserByEmailAsync(email);
+
+            var userTransactions = await _db.Transactions
+                .Where(t => 
+                    t.UserId.Equals(user.Id) && 
+                    t.IsPaid)
+                .ToListAsync();
+
+            var walletViewModels = userTransactions.Select(transaction => new WalletViewModel()
+            {
+                Amount = transaction.Amount, 
+                TransactionType = transaction.TransactionType,
+                Description = transaction.Description, 
+                TransactionDateTime = transaction.TransactionDate
+            }).ToList();
+
+            var transactions = new TransactionViewModel()
+            {
+                ChargeWallet = new ChargeWalletViewModel(),
+                TransactionsList = walletViewModels
+            };
+
+            return transactions;
+        }
+
+        public async Task ChargeUserWallet(string email, int amount, string description, bool isPaid = false)
+        {
+            var user = await GetUserByEmailAsync(email);
+
+            var transaction = new Transaction()
+            {
+                Amount = amount,
+                IsPaid = isPaid,
+                TransactionDate = DateTime.Now,
+                TransactionType = TransactionType.Deposit,
+                Description = description,
+                UserId = user.Id
+            };
+
+            await AddTransactionAsync(transaction);
+        }
+
+        public async Task AddTransactionAsync(Transaction transaction)
+        {
+            await _db.Transactions.AddAsync(transaction);
+            await _db.SaveChangesAsync();
         }
     }
 }

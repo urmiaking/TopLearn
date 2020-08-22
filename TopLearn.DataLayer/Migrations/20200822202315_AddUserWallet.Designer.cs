@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TopLearn.DataLayer.Context;
 
 namespace TopLearn.DataLayer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200822202315_AddUserWallet")]
+    partial class AddUserWallet
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -106,19 +108,6 @@ namespace TopLearn.DataLayer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ActivationCode = "",
-                            Avatar = "default-avatar.png",
-                            Email = "masoud.brilliant@hotmail.com",
-                            IsActive = true,
-                            Name = "مسعود خدادادی",
-                            Password = "db901737c41e490dec8bded913f112e5e7c720c3847558f0e5c65128bdb1b34c",
-                            RegisterDate = new DateTime(2020, 8, 23, 1, 16, 33, 977, DateTimeKind.Local).AddTicks(5230)
-                        });
                 });
 
             modelBuilder.Entity("TopLearn.DataLayer.Entities.User.UserRole", b =>
@@ -175,38 +164,6 @@ namespace TopLearn.DataLayer.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Transactions");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Amount = 25000,
-                            Description = "شارژ حساب",
-                            IsPaid = true,
-                            TransactionDate = new DateTime(2020, 8, 23, 1, 16, 33, 981, DateTimeKind.Local).AddTicks(3585),
-                            TransactionType = 1,
-                            UserId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Amount = 6000,
-                            Description = "شارژ حساب",
-                            IsPaid = true,
-                            TransactionDate = new DateTime(2020, 8, 23, 1, 16, 33, 981, DateTimeKind.Local).AddTicks(5756),
-                            TransactionType = 1,
-                            UserId = 1
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Amount = 8000,
-                            Description = "خرید آموزش",
-                            IsPaid = true,
-                            TransactionDate = new DateTime(2020, 8, 23, 1, 16, 33, 981, DateTimeKind.Local).AddTicks(5804),
-                            TransactionType = 0,
-                            UserId = 1
-                        });
                 });
 
             modelBuilder.Entity("TopLearn.DataLayer.Entities.User.UserRole", b =>

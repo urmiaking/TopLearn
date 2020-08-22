@@ -4,6 +4,7 @@ using System.Text;
 using Microsoft.EntityFrameworkCore;
 using TopLearn.DataLayer.Entities.Mail;
 using TopLearn.DataLayer.Entities.User;
+using TopLearn.DataLayer.Entities.Wallet;
 using TopLearn.DataLayer.Extensions;
 
 namespace TopLearn.DataLayer.Context
@@ -24,6 +25,12 @@ namespace TopLearn.DataLayer.Context
         #region Mail
 
         public virtual DbSet<MailServer> MailServers { get; set; }
+
+        #endregion
+
+        #region Wallet
+
+        public virtual DbSet<Transaction> Transactions { get; set; }
 
         #endregion
 
