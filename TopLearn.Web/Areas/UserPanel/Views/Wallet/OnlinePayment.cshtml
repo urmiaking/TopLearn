@@ -1,0 +1,54 @@
+﻿
+@{
+    ViewData["Title"] = "نتیجه پرداخت";
+}
+
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">تاپ لرن</a></li>
+            <li class="breadcrumb-item active" aria-current="page"> نتیجه پرداخت </li>
+        </ul>
+    </nav>
+</div>
+
+<main>
+    <div class="container">
+        <div class="user-account">
+            <div class="row">
+                @await Component.InvokeAsync("Sidebar")
+                <div class="col-md-9 col-sm-8 col-xs-12">
+                    <section class="user-account-content">
+                        <header>
+                            <h1> نتیجه پرداخت </h1>
+                        </header>
+                        <div class="inner form-layer">
+                            @if (ViewBag.IsSuccess.Equals(true))
+                            {
+                                <div class="text-center alert alert-success">
+                                    <h3>پرداخت با موفقیت انجام شد</h3>
+                                    <br />
+                                    <p> کد پیگیری : @ViewBag.RefId</p>
+                                </div>
+                                <div class="text-center">
+                                    <a class="btn btn-info" asp-controller="Home" asp-action="Index">بازگشت</a>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="text-center alert alert-danger">
+                                    <h3>پرداخت با خطا مواجه شد</h3>
+                                    <br />
+                                </div>
+                                <div class="text-center">
+                                    <a class="btn btn-info" asp-controller="Home" asp-action="Index">بازگشت</a>
+                                </div>
+                            }
+
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

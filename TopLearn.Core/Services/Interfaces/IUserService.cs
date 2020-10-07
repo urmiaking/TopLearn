@@ -62,9 +62,15 @@ namespace TopLearn.Core.Services.Interfaces
 
         Task<TransactionViewModel> GetUserTransactionViewModelAsync(string email);
 
-        Task ChargeUserWallet(string email, int amount, string description, bool isPaid = false);
+        Task<int> ChargeUserWallet(string email, int amount, string description, bool isPaid = false);
 
-        Task AddTransactionAsync(Transaction transaction);
+        Task<int> AddTransactionAsync(Transaction transaction);
+
+        Task<Transaction> GetTransactionByIdAsync(int id);
+
+        Task VerifyTransactionAsync(Transaction transaction);
+
+        Task RemoveFailedTransactionAsync(Transaction transaction);
 
         #endregion
     }

@@ -318,7 +318,7 @@ namespace TopLearn.Core.Services
             return transactions;
         }
 
-        public async Task ChargeUserWallet(string email, int amount, string description, bool isPaid = false)
+        public async Task<int> ChargeUserWallet(string email, int amount, string description, bool isPaid = false)
         {
             var user = await GetUserByEmailAsync(email);
 
@@ -332,12 +332,30 @@ namespace TopLearn.Core.Services
                 UserId = user.Id
             };
 
-            await AddTransactionAsync(transaction);
+            return await AddTransactionAsync(transaction);
         }
 
-        public async Task AddTransactionAsync(Transaction transaction)
+        public async Task<int> AddTransactionAsync(Transaction transaction)
         {
             await _db.Transactions.AddAsync(transaction);
+            await _db.SaveChangesAsync();
+            return transaction.Id;
+        }
+
+        public async Task<Transaction> GetTransactionByIdAsync(int id) 
+            => await _db.Transactions.FindAsync(id);
+
+        public async Task VerifyTransactionAsync(Transaction transaction)
+        {
+            transaction.IsPaid = true;
+
+            _db.Transactions.Update(transaction);
+            await _db.SaveChangesAsync();
+        }
+
+        public async Task RemoveFailedTransactionAsync(Transaction transaction)
+        {
+            _db.Remove(transaction);
             await _db.SaveChangesAsync();
         }
     }

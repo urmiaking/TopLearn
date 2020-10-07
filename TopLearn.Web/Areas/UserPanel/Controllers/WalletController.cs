@@ -37,20 +37,66 @@ namespace TopLearn.Web.Areas.UserPanel.Controllers
                 return View(transactionForm);
             }
 
-            await _userService.ChargeUserWallet(email, transactionForm.ChargeWallet.Amount, "شارژ حساب", true);
+            var transactionId = await _userService.ChargeUserWallet(email, 
+                transactionForm.ChargeWallet.Amount, "شارژ حساب", false);
 
-            //TODO: Online payment and set isPaid to true if payment successful
+            var payment = new ZarinpalSandbox.Payment(transactionForm.ChargeWallet.Amount);
 
-            var isSucceed = true;
+            var result = await payment
+                .PaymentRequest("شارژ کیف پول",
+                    string.Concat(Request.Scheme, "://", Request.Host.ToUriComponent(),
+                        $"/OnlinePayment/{transactionId}"), "masoud.xpress@gmail.com", "09905492104");
 
-            if (!isSucceed)
+            if (result.Status is 100)
             {
-                TempData["Error"] = "مشکلی در شارژ کیف پول شما پیش آمد. لطفا بعدا امتحان کنید";
-                return View(transactionForm);
+                return Redirect("https://sandbox.zarinpal.com/pg/StartPay/" + result.Authority);
             }
 
-            TempData["Success"] = "کیف پول شما با موفقیت شارژ شد";
+            await _userService.RemoveFailedTransactionAsync(
+                await _userService.GetTransactionByIdAsync(transactionId));
+
+            TempData["Error"] = "پرداخت با خطا مواجه شد";
             return View(transactionForm);
+        }
+
+        [Route("[action]/{transactionId}")]
+        public async Task<IActionResult> OnlinePayment(string authority, string status, int transactionId = 0)
+        {
+            if (string.IsNullOrEmpty(status) ||
+                string.IsNullOrEmpty(authority))
+            {
+                return NotFound();
+            }
+
+            if (transactionId is 0)
+            {
+                return NotFound();
+            }
+
+            var transaction = await _userService.GetTransactionByIdAsync(transactionId);
+
+            if (transaction is null)
+            {
+                return NotFound();
+            }
+
+            var payment = new ZarinpalSandbox.Payment(transaction.Amount);
+
+            var result = payment.Verification(authority).Result;
+
+            if (!(result.Status is 100))
+            {
+                await _userService.RemoveFailedTransactionAsync(transaction);
+
+                ViewBag.IsSuccess = false;
+                return View();
+            }
+
+            await _userService.VerifyTransactionAsync(transaction);
+
+            ViewBag.RefId = result.RefId;
+            ViewBag.IsSuccess = true;
+            return View();
         }
     }
 }
