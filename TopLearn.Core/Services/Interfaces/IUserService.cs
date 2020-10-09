@@ -73,5 +73,11 @@ namespace TopLearn.Core.Services.Interfaces
         Task RemoveFailedTransactionAsync(Transaction transaction);
 
         #endregion
+
+        #region Admin Panel
+
+        Task<List<User>> GetUsers();
+
+        #endregion
     }
 }

@@ -274,14 +274,14 @@ namespace TopLearn.Core.Services
 
             var deposits = await _db.Transactions
                 .Where(t =>
-                    t.UserId.Equals(user.Id) && 
+                    t.UserId.Equals(user.Id) &&
                     t.IsPaid &&
                     t.TransactionType.Equals(TransactionType.Deposit))
                 .SumAsync(t => t.Amount);
 
             var withDraws = await _db.Transactions
                 .Where(t =>
-                    t.UserId.Equals(user.Id) && 
+                    t.UserId.Equals(user.Id) &&
                     t.IsPaid &&
                     t.TransactionType.Equals(TransactionType.WithDraw))
                 .SumAsync(t => t.Amount);
@@ -296,16 +296,16 @@ namespace TopLearn.Core.Services
             var user = await GetUserByEmailAsync(email);
 
             var userTransactions = await _db.Transactions
-                .Where(t => 
-                    t.UserId.Equals(user.Id) && 
+                .Where(t =>
+                    t.UserId.Equals(user.Id) &&
                     t.IsPaid)
                 .ToListAsync();
 
             var walletViewModels = userTransactions.Select(transaction => new WalletViewModel()
             {
-                Amount = transaction.Amount, 
+                Amount = transaction.Amount,
                 TransactionType = transaction.TransactionType,
-                Description = transaction.Description, 
+                Description = transaction.Description,
                 TransactionDateTime = transaction.TransactionDate
             }).ToList();
 
@@ -342,7 +342,7 @@ namespace TopLearn.Core.Services
             return transaction.Id;
         }
 
-        public async Task<Transaction> GetTransactionByIdAsync(int id) 
+        public async Task<Transaction> GetTransactionByIdAsync(int id)
             => await _db.Transactions.FindAsync(id);
 
         public async Task VerifyTransactionAsync(Transaction transaction)
@@ -358,5 +358,7 @@ namespace TopLearn.Core.Services
             _db.Remove(transaction);
             await _db.SaveChangesAsync();
         }
+
+        public async Task<List<User>> GetUsers() => await _db.Users.ToListAsync();
     }
 }
