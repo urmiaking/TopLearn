@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30406.217
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TopLearn.Web", "TopLearn.Web\TopLearn.Web.csproj", "{EBEA6FC6-E7AB-4A73-BD83-D0E1335198B5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TopLearn.Web", "TopLearn.Web\TopLearn.Web.csproj", "{EBEA6FC6-E7AB-4A73-BD83-D0E1335198B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TopLearn.DataLayer", "TopLearn.DataLayer\TopLearn.DataLayer.csproj", "{728288E1-CF17-4E98-85F5-9E134B84A1E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TopLearn.DataLayer", "TopLearn.DataLayer\TopLearn.DataLayer.csproj", "{728288E1-CF17-4E98-85F5-9E134B84A1E7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TopLearn.Core", "TopLearn.Core\TopLearn.Core.csproj", "{AF433835-A9A1-4BD1-81C4-B4FC693EEB92}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TopLearn.Core", "TopLearn.Core\TopLearn.Core.csproj", "{AF433835-A9A1-4BD1-81C4-B4FC693EEB92}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
