@@ -48,7 +48,7 @@
             <div class="panel-heading">
                 لیست کاربران سایت
                 <div style="float: left">
-                    <a class="btn btn-sm btn-outline btn-success" style="display: inline !important">افزودن کاربر جدید</a>
+                    <a asp-page="/Admin/Users/CreateUser" class="btn btn-sm btn-outline btn-success" style="display: inline !important">افزودن کاربر جدید</a>
                 </div>
             </div>
             <!-- /.panel-heading -->
@@ -83,8 +83,8 @@
                                     }
                                     <td>@user.RegisterDate.ToPersianDateString()</td>
                                     <td>
-                                        <a class="btn btn-info">ویرایش</a> |
-                                        <a class="btn btn-danger">حذف</a>
+                                        <a class="btn btn-sm btn-info">ویرایش</a> |
+                                        <a class="btn btn-sm btn-danger">حذف</a>
                                     </td>
                                 </tr>
                             }

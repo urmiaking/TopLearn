@@ -85,6 +85,20 @@ namespace TopLearn.DataLayer.Extensions
                     TransactionType = TransactionType.WithDraw,
                     UserId = 1
                 });
+            modelBuilder.Entity<Role>()
+                .HasData(new Role()
+                {
+                    Id = 1,
+                    Title = "مدیر سایت"
+                }, new Role
+                {
+                    Id = 2,
+                    Title = "مدرس"
+                }, new Role
+                {
+                    Id = 3,
+                    Title = "کاربر عادی"
+                });
         }
     }
 }

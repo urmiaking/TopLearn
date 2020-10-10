@@ -367,3 +367,16 @@ table.dataTable thead .sorting:after {
 .show-grid {
     margin: 15px 0;
 }
+
+.field-validation-error {
+    color: red;
+}
+
+.input-validation-error {
+    border-color: red;
+}
+
+.bordered-div {
+    outline: 1px solid #cccccc;
+    padding: 6px 12px;
+}

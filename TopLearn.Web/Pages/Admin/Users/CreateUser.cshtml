@@ -1,0 +1,94 @@
+﻿@page
+
+@using TopLearn.Core.Services.Interfaces
+@model TopLearn.Web.Pages.Admin.Users.CreateUserModel
+@inject IPermissionService PermissionService
+@{
+    ViewBag.Title = "افزودن کاربر جدید";
+}
+
+@section PluginStyles
+{
+    <link rel="stylesheet" type="text/css" href="/lib/fileuploads/css/dropify.min.css">
+}
+
+@section PluginScripts
+{
+    <script src="/lib/fileuploads/js/dropify.min.js"></script>
+}
+
+@section DemoScripts
+{
+    <script type="text/javascript">
+        $('#imageFile').dropify({
+            messages: {
+                'default': 'فایل را به اینجا بکشید یا کلیک کنید',
+                'replace': 'برای جایگزینی فایل را به اینجا بکشید یا کلیک کنید',
+                'remove': 'پاک کردن',
+                'error': 'با پوزش فراوان، خطایی رخ داده'
+            },
+            error: {
+                'fileSize': 'حجم فایل بیشتر از حد مجاز است (1M).'
+            }
+        });
+    </script>
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                اطلاعات کاربر
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form role="form" method="post" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label asp-for="UserViewModel.Name"></label>
+                                <input asp-for="UserViewModel.Name" class="form-control">
+                                <span asp-validation-for="UserViewModel.Name"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="UserViewModel.Email"></label>
+                                <input asp-for="UserViewModel.Email" class="form-control">
+                                <span asp-validation-for="UserViewModel.Email"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="UserViewModel.Password"></label>
+                                <input asp-for="UserViewModel.Password" class="form-control">
+                                <span asp-validation-for="UserViewModel.Password"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="UserViewModel.AvatarFile"></label>
+                                <input asp-for="UserViewModel.AvatarFile"
+                                       id="imageFile"
+                                       accept="image/x-png,image/gif,image/jpeg"
+                                       type="file" class="form-control">
+                                <span asp-validation-for="UserViewModel.AvatarFile"></span>
+                            </div>
+                            <div class="form-group">
+                                <label>انتخاب نقش ها</label>
+                                <div class="bordered-div">
+                                    @foreach (var role in await PermissionService.GetRolesAsync())
+                                    {
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" name="roleIds" value="@role.Id">@role.Title
+                                            </label>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-block btn-success">ذخیره</button>
+                        </form>
+                    </div>
+                </div>
+                <!-- /.row (nested) -->
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
+    <!-- /.col-md-12 -->
+</div>
