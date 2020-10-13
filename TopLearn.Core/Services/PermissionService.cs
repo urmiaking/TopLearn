@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TopLearn.Core.Services.Interfaces;
@@ -17,10 +18,26 @@ namespace TopLearn.Core.Services
         }
 
         public async Task<List<Role>> GetRolesAsync() => await _db.Roles.ToListAsync();
+
+        public async Task<Role> GetRoleByIdAsync(int id) => await _db.Roles.FindAsync(id);
+
+        public async Task<List<UserRole>> GetUserRolesByUserIdAsync(int id) =>
+            await _db.UserRoles.Where(a => a.UserId.Equals(id)).ToListAsync();
+
         public async Task AddUserRoleAsync(UserRole userRole)
         {
             await _db.AddAsync(userRole);
             await _db.SaveChangesAsync();
+        }
+
+        public async Task RemoveUserRoleAsync(List<UserRole> userRoles)
+        {
+            if (userRoles.Any())
+            {
+                _db.UserRoles.RemoveRange(userRoles);
+                await _db.SaveChangesAsync();
+            }
+            
         }
     }
 }

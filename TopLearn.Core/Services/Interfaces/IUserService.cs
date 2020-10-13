@@ -16,6 +16,8 @@ namespace TopLearn.Core.Services.Interfaces
 
         Task<User> GetUserByActivationCodeAsync(string activationCode);
 
+        Task<User> GetUserByIdAsync(int id);
+
         #endregion
 
         #region Account
@@ -77,6 +79,10 @@ namespace TopLearn.Core.Services.Interfaces
         #region Admin Panel
 
         Task<List<User>> GetUsers();
+
+        Task<EditUserViewModel> GetEditUserViewModelByUserId(int id);
+
+        Task EditUserAsync(EditUserViewModel editUserViewModel);
 
         #endregion
     }

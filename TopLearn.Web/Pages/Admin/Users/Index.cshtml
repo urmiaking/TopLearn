@@ -83,7 +83,7 @@
                                     }
                                     <td>@user.RegisterDate.ToPersianDateString()</td>
                                     <td>
-                                        <a class="btn btn-sm btn-info">ویرایش</a> |
+                                        <a asp-page="/Admin/Users/EditUser" asp-route-id="@user.Id" class="btn btn-sm btn-info">ویرایش</a> |
                                         <a class="btn btn-sm btn-danger">حذف</a>
                                     </td>
                                 </tr>

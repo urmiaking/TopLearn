@@ -42,7 +42,7 @@ namespace TopLearn.Web.Pages.Admin.Users
                 return Page();
             }
 
-            if ((await _userService.GetUserByEmailAsync(UserViewModel.Email)) != null)
+            if (await _userService.GetUserByEmailAsync(UserViewModel.Email) != null)
             {
                 TempData["Error"] = "کاربر با ایمیل وارد شده موجود است";
                 return Page();

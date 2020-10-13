@@ -30,4 +30,35 @@ namespace TopLearn.Core.DTOs
         [DataType(DataType.Upload)]
         public IFormFile AvatarFile { get; set; }
     }
+
+    public class EditUserViewModel
+    {
+        public int Id { get; set; }
+
+        [Display(Name = "نام و نام خانوادگی")]
+        [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
+        [MaxLength(200, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
+        public string Name { get; set; }
+
+        [Display(Name = "ایمیل")]
+        [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
+        [MaxLength(200, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
+        [EmailAddress(ErrorMessage = "{0} وارد شده معتبر نیست")]
+        public string Email { get; set; }
+
+        [Display(Name = "کلمه عبور جدید")]
+        [MinLength(6, ErrorMessage = "{0} باید بیشتر از {1} کاراکتر باشد")]
+        public string NewPassword { get; set; }
+
+        [Display(Name = "وضعیت")]
+        public bool IsActive { get; set; }
+
+        [Display(Name = "تصویر کاربر")]
+        [DataType(DataType.Upload)]
+        public IFormFile ImageFile { get; set; }
+
+        public string ImageName { get; set; }
+
+        public List<int> Roles { get; set; }
+    }
 }

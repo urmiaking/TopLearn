@@ -21,12 +21,17 @@ namespace TopLearn.Web.Controllers
         private readonly IUserService _userService;
         private readonly IViewRenderService _viewRenderService;
         private readonly IMailService _mailService;
+        private readonly IPermissionService _permissionService;
 
-        public AccountController(IUserService userService, IViewRenderService viewRenderService, IMailService mailService)
+        public AccountController(IUserService userService,
+            IViewRenderService viewRenderService,
+            IMailService mailService,
+            IPermissionService permissionService)
         {
             _userService = userService;
             _viewRenderService = viewRenderService;
             _mailService = mailService;
+            _permissionService = permissionService;
         }
 
         #region Register
@@ -57,6 +62,14 @@ namespace TopLearn.Web.Controllers
             };
 
             await _userService.AddUserAsync(user);
+
+            var userRole = new UserRole
+            {
+                RoleId = 3,
+                UserId = (await _userService.GetUserByEmailAsync(user.Email)).Id
+            };
+
+            await _permissionService.AddUserRoleAsync(userRole);
 
             #region Send Account Activation Email
 

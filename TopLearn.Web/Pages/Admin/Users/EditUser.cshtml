@@ -1,0 +1,125 @@
+﻿@page "{id}"
+@using TopLearn.Core.Services.Interfaces
+@model TopLearn.Web.Pages.Admin.Users.EditUserModel
+@inject IPermissionService PermissionService
+@{
+    ViewBag.Title = "ویرایش کاربر";
+}
+
+
+@section PluginStyles
+{
+    <link rel="stylesheet" type="text/css" href="/lib/fileuploads/css/dropify.min.css">
+}
+
+@section PluginScripts
+{
+    <script src="/lib/fileuploads/js/dropify.min.js"></script>
+}
+
+@section DemoScripts
+{
+    <script type="text/javascript">
+        $('#imageFile').dropify({
+            messages: {
+                'default': 'فایل را به اینجا بکشید یا کلیک کنید',
+                'replace': 'برای جایگزینی فایل را به اینجا بکشید یا کلیک کنید',
+                'remove': 'پاک کردن',
+                'error': 'با پوزش فراوان، خطایی رخ داده'
+            },
+            error: {
+                'fileSize': 'حجم فایل بیشتر از حد مجاز است (1M).'
+            }
+        });
+    </script>
+    <script>
+        $(function () {
+            $('#status-content').text($("#status-checkbox").is(':checked') ? "فعال" : "غیرفعال");
+            $("#status-checkbox").change(function () {
+                if (this.checked) {
+                    $("#status-content").text("فعال");
+                } else {
+                    $("#status-content").text("غیرفعال");
+                }
+            });
+        })
+    </script>
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                اطلاعات کاربر
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form role="form" method="post" enctype="multipart/form-data">
+                            <input type="hidden" asp-for="EditUserViewModel.Id" />
+                            <div class="form-group">
+                                <label asp-for="EditUserViewModel.Name"></label>
+                                <input asp-for="EditUserViewModel.Name" class="form-control">
+                                <span asp-validation-for="EditUserViewModel.Name"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="EditUserViewModel.Email"></label>
+                                <input asp-for="EditUserViewModel.Email" class="form-control">
+                                <span asp-validation-for="EditUserViewModel.Email"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="EditUserViewModel.NewPassword"></label>
+                                <input asp-for="EditUserViewModel.NewPassword" class="form-control">
+                                <p class="help-block">در صورت تمایل به تغییر رمز عبور، این فیلد را پر کنید</p>
+                                <span asp-validation-for="EditUserViewModel.NewPassword"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="EditUserViewModel.ImageFile"></label>
+                                <input asp-for="EditUserViewModel.ImageFile"
+                                       id="imageFile" data-default-file="/../../images/avatars/@Model.EditUserViewModel.ImageName"
+                                       accept="image/x-png,image/gif,image/jpeg"
+                                       type="file" class="form-control">
+                                <span asp-validation-for="EditUserViewModel.ImageFile"></span>
+                                <input type="hidden" asp-for="EditUserViewModel.ImageName" />
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="EditUserViewModel.IsActive"></label>
+                                <div class="bordered-div">
+                                    <div class="checkbox">
+                                        <label id="status-label">
+                                            <input id="status-checkbox" type="checkbox" asp-for="EditUserViewModel.IsActive">
+                                            <div id="status-content"></div>
+                                        </label>
+                                    </div>
+                                    <span asp-validation-for="EditUserViewModel.IsActive"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>انتخاب نقش ها</label>
+                                <div class="bordered-div">
+                                    @foreach (var role in await PermissionService.GetRolesAsync())
+                                    {
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox"
+                                                       name="roleIds"
+                                                       value="@role.Id"
+                                                       @(Model.EditUserViewModel.Roles != null ? (Model.EditUserViewModel.Roles.Any(r => r.Equals(role.Id)) ? "checked" : "") : "")>
+                                                @role.Title
+                                            </label>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-block btn-success">ذخیره تغییرات</button>
+                        </form>
+                    </div>
+                </div>
+                <!-- /.row (nested) -->
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
+    <!-- /.col-md-12 -->
+</div>

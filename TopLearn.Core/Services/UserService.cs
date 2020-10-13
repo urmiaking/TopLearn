@@ -24,11 +24,14 @@ namespace TopLearn.Core.Services
     {
         private readonly AppDbContext _db;
 
+        private readonly IPermissionService _permissionService;
+
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UserService(AppDbContext db, IHttpContextAccessor httpContextAccessor)
+        public UserService(AppDbContext db, IPermissionService permissionService, IHttpContextAccessor httpContextAccessor)
         {
             _db = db;
+            _permissionService = permissionService;
             _httpContextAccessor = httpContextAccessor;
         }
 
@@ -63,7 +66,7 @@ namespace TopLearn.Core.Services
         }
 
         public async Task<User> GetUserByEmailAsync(string email) =>
-            await _db.Users.FirstOrDefaultAsync(u => u.Email.Equals(email));
+            await _db.Users.FirstOrDefaultAsync(u => u.Email.Equals(OptimizeText.OptimizeEmail(email)));
 
         public async Task<bool> IsEmailExistAsync(string email) =>
             await _db.Users.AnyAsync(user =>
@@ -208,7 +211,7 @@ namespace TopLearn.Core.Services
 
             var claims = new ClaimViewModel()
             {
-                Email = profile.Email,
+                Email = OptimizeText.OptimizeEmail(profile.Email),
                 Name = profile.Name,
                 RememberMe = Convert.ToBoolean(_httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.AuthenticationMethod).Value)
             };
@@ -216,7 +219,7 @@ namespace TopLearn.Core.Services
             await CreateCookieAsync(claims);
 
             user.Name = profile.Name;
-            user.Email = profile.Email;
+            user.Email = OptimizeText.OptimizeEmail(profile.Email);
 
             await UpdateUserAsync(user);
 
@@ -360,5 +363,59 @@ namespace TopLearn.Core.Services
         }
 
         public async Task<List<User>> GetUsers() => await _db.Users.ToListAsync();
+
+        public async Task<User> GetUserByIdAsync(int id) => await _db.Users.FindAsync(id);
+
+        public async Task<EditUserViewModel> GetEditUserViewModelByUserId(int id)
+        {
+            var user = await _db.Users
+                .FirstOrDefaultAsync(a => a.Id.Equals(id));
+
+            if (user is null)
+            {
+                return null;
+            }
+
+            var editUserViewModel = new EditUserViewModel
+            {
+                Id = id,
+                Email = user.Email,
+                ImageName = user.Avatar,
+                IsActive = user.IsActive,
+                Name = user.Name,
+                Roles = user.UserRoles.Select(role => role.RoleId).ToList()
+            };
+
+            return editUserViewModel;
+        }
+
+        public async Task EditUserAsync(EditUserViewModel editUserViewModel)
+        {
+            var user = await GetUserByIdAsync(editUserViewModel.Id);
+
+            user.Email = OptimizeText.OptimizeEmail(editUserViewModel.Email);
+            user.Avatar = editUserViewModel.ImageName;
+            user.Name = editUserViewModel.Name;
+            user.Password = editUserViewModel.NewPassword is null
+                ? user.Password
+                : PasswordHelper.Hash(editUserViewModel.NewPassword);
+            user.IsActive = editUserViewModel.IsActive;
+
+            _db.Users.Update(user);
+            await _db.SaveChangesAsync();
+
+            var userRoles = await _permissionService.GetUserRolesByUserIdAsync(editUserViewModel.Id);
+            await _permissionService.RemoveUserRoleAsync(userRoles);
+
+            foreach (var roleId in editUserViewModel.Roles)
+            {
+                var userRole = new UserRole
+                {
+                    RoleId = roleId,
+                    UserId = editUserViewModel.Id
+                };
+                await _permissionService.AddUserRoleAsync(userRole);
+            }
+        }
     }
 }

@@ -10,6 +10,23 @@ namespace TopLearn.Core.Services
 {
     public class PictureService : IPictureService
     {
+        public void RemoveImage(string imageName, string path)
+        {
+            if (imageName == "default-avatar.png") return;
+            var imagePath = Path.Combine(Directory.GetCurrentDirectory(),
+                $"wwwroot/images/{path}", imageName);
+
+            if (File.Exists(imagePath))
+            {
+                File.Delete(imagePath);
+            }
+            else
+            {
+                //TODO: Log error
+                Console.WriteLine($"The image path cannot be found. Path = {imagePath}");
+            }
+        }
+
         public async Task<ImageViewModel> SaveImageAsync(IFormFile imageFile, string path)
         {
             var imageViewModel = new ImageViewModel

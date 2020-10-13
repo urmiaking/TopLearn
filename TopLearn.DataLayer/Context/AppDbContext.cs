@@ -39,5 +39,10 @@ namespace TopLearn.DataLayer.Context
             base.OnModelCreating(modelBuilder);
             modelBuilder.Seed();
         }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseLazyLoadingProxies();
+        }
     }
 }

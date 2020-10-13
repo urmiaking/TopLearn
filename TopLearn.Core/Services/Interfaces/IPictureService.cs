@@ -10,5 +10,6 @@ namespace TopLearn.Core.Services.Interfaces
     public interface IPictureService
     {
         Task<ImageViewModel> SaveImageAsync(IFormFile imageFile, string path);
+        void RemoveImage(string imageName, string path);
     }
 }

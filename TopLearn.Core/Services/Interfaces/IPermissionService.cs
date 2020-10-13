@@ -8,6 +8,12 @@ namespace TopLearn.Core.Services.Interfaces
     {
         Task<List<Role>> GetRolesAsync();
 
+        Task<Role> GetRoleByIdAsync(int id);
+
+        Task<List<UserRole>> GetUserRolesByUserIdAsync(int id);
+
         Task AddUserRoleAsync(UserRole userRole);
+
+        Task RemoveUserRoleAsync(List<UserRole> userRoles);
     }
 }
