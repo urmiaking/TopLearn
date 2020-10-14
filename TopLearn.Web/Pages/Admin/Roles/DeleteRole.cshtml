@@ -1,0 +1,40 @@
+﻿@page "{id}"
+@model TopLearn.Web.Pages.Admin.Roles.DeleteRoleModel
+@{
+    ViewBag.Title = "حذف نقش";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                اطلاعات نقش
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form role="form" method="post" enctype="multipart/form-data">
+                            <input type="hidden" asp-for="Role.Id"/>
+                            <div class="form-group">
+                                <label asp-for="Role.Title"></label>
+                                <input disabled="" asp-for="Role.Title" class="form-control">
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <button type="submit" class="btn btn-block btn-danger button-margin-10-top">حذف</button>
+                                </div>
+                                <div class="col-md-6">
+                                    <a asp-page="/Admin/Roles/Index" class="btn btn-block btn-info button-margin-10-top">بازگشت</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- /.row (nested) -->
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
+    <!-- /.col-md-12 -->
+</div>

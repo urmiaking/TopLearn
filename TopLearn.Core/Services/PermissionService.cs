@@ -20,6 +20,17 @@ namespace TopLearn.Core.Services
         public async Task<List<Role>> GetRolesAsync() => await _db.Roles.ToListAsync();
 
         public async Task<Role> GetRoleByIdAsync(int id) => await _db.Roles.FindAsync(id);
+        public async Task AddRoleAsync(Role role)
+        {
+            await _db.AddAsync(role);
+            await _db.SaveChangesAsync();
+        }
+
+        public async Task EditRoleAsync(Role role)
+        {
+            _db.Roles.Update(role);
+            await _db.SaveChangesAsync();
+        }
 
         public async Task<List<UserRole>> GetUserRolesByUserIdAsync(int id) =>
             await _db.UserRoles.Where(a => a.UserId.Equals(id)).ToListAsync();
@@ -38,6 +49,24 @@ namespace TopLearn.Core.Services
                 await _db.SaveChangesAsync();
             }
             
+        }
+
+        public async Task<bool> RemoveRoleAsync(int id)
+        {
+            var role = await GetRoleByIdAsync(id);
+            if (role is null)
+            {
+                return false;
+            }
+
+            if (role.UserRoles.Any())
+            {
+                return false;
+            }
+
+            _db.Roles.Remove(role);
+            await _db.SaveChangesAsync();
+            return true;
         }
     }
 }
