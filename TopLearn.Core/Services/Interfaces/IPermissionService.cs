@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using TopLearn.DataLayer.Entities.Permissions;
 using TopLearn.DataLayer.Entities.User;
 
 namespace TopLearn.Core.Services.Interfaces
@@ -12,7 +13,7 @@ namespace TopLearn.Core.Services.Interfaces
 
         Task<Role> GetRoleByIdAsync(int id);
 
-        Task AddRoleAsync(Role role);
+        Task<int> AddRoleAsync(Role role);
 
         Task EditRoleAsync(Role role);
 
@@ -27,6 +28,18 @@ namespace TopLearn.Core.Services.Interfaces
         Task AddUserRoleAsync(UserRole userRole);
 
         Task RemoveUserRoleAsync(List<UserRole> userRoles);
+
+        #endregion
+
+        #region Permission
+
+        Task<List<Permission>> GetPermissionsAsync();
+
+        Task AddPermissionRoleAsync(RolePermission rolePermission);
+
+        Task RemovePermissionRolesByRoleIdAsync(int roleId);
+
+        Task<List<int>> GetSelectedPermissionsByRoleIdAsync(int roleId);
 
         #endregion
 

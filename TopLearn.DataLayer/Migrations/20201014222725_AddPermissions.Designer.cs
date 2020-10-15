@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TopLearn.DataLayer.Context;
 
 namespace TopLearn.DataLayer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201014222725_AddPermissions")]
+    partial class AddPermissions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -73,31 +75,6 @@ namespace TopLearn.DataLayer.Migrations
                     b.HasIndex("ParentId");
 
                     b.ToTable("Permissions");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Title = "پنل مدیریت"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            ParentId = 1,
-                            Title = "مدیریت کاربران"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            ParentId = 2,
-                            Title = "افزودن کاربر"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            ParentId = 2,
-                            Title = "ویرایش کاربر"
-                        });
                 });
 
             modelBuilder.Entity("TopLearn.DataLayer.Entities.Permissions.RolePermission", b =>
@@ -203,7 +180,7 @@ namespace TopLearn.DataLayer.Migrations
                             IsActive = true,
                             Name = "مسعود خدادادی",
                             Password = "db901737c41e490dec8bded913f112e5e7c720c3847558f0e5c65128bdb1b34c",
-                            RegisterDate = new DateTime(2020, 10, 15, 2, 6, 40, 281, DateTimeKind.Local).AddTicks(9182)
+                            RegisterDate = new DateTime(2020, 10, 15, 1, 57, 24, 597, DateTimeKind.Local).AddTicks(6891)
                         });
                 });
 
@@ -269,7 +246,7 @@ namespace TopLearn.DataLayer.Migrations
                             Amount = 25000,
                             Description = "شارژ حساب",
                             IsPaid = true,
-                            TransactionDate = new DateTime(2020, 10, 15, 2, 6, 40, 286, DateTimeKind.Local).AddTicks(2443),
+                            TransactionDate = new DateTime(2020, 10, 15, 1, 57, 24, 601, DateTimeKind.Local).AddTicks(6861),
                             TransactionType = 1,
                             UserId = 1
                         },
@@ -279,7 +256,7 @@ namespace TopLearn.DataLayer.Migrations
                             Amount = 6000,
                             Description = "شارژ حساب",
                             IsPaid = true,
-                            TransactionDate = new DateTime(2020, 10, 15, 2, 6, 40, 286, DateTimeKind.Local).AddTicks(4322),
+                            TransactionDate = new DateTime(2020, 10, 15, 1, 57, 24, 601, DateTimeKind.Local).AddTicks(8730),
                             TransactionType = 1,
                             UserId = 1
                         },
@@ -289,7 +266,7 @@ namespace TopLearn.DataLayer.Migrations
                             Amount = 8000,
                             Description = "خرید آموزش",
                             IsPaid = true,
-                            TransactionDate = new DateTime(2020, 10, 15, 2, 6, 40, 286, DateTimeKind.Local).AddTicks(4364),
+                            TransactionDate = new DateTime(2020, 10, 15, 1, 57, 24, 601, DateTimeKind.Local).AddTicks(8772),
                             TransactionType = 0,
                             UserId = 1
                         });

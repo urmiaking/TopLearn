@@ -13,23 +13,74 @@
             </div>
             <div class="panel-body">
                 <div class="row">
-                    <div class="col-md-12">
-                        <form role="form" method="post" enctype="multipart/form-data">
+                    <form role="form" method="post" enctype="multipart/form-data">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label asp-for="Role.Title"></label>
                                 <input asp-for="Role.Title" class="form-control">
                                 <span asp-validation-for="Role.Title"></span>
                             </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <button type="submit" class="btn btn-block btn-success button-margin-10-top">ذخیره</button>
-                                </div>
-                                <div class="col-md-6">
-                                    <a asp-page="/Admin/Roles/Index" class="btn btn-block btn-info button-margin-10-top">بازگشت</a>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>دسترسی های نقش</label>
+                                <div class="bordered-div">
+                                    <div class="col-md-12">
+                                        <ul style="list-style-type:none; padding: 0;">
+                                            @foreach (var permission in Model.Permissions.Where(p => p.ParentId is null))
+                                            {
+                                                <li>
+                                                    <div class="checkbox">
+                                                        <label>
+                                                            <input type="checkbox" name="selectedPermissions" value="@permission.Id" /> @permission.Title
+                                                        </label>
+                                                    </div>
+                                                    @if (Model.Permissions.Any(p => p.ParentId.Equals(permission.Id)))
+                                                    {
+                                                        <ul style="list-style-type:none;">
+                                                            @foreach (var subPermission in Model.Permissions.Where(p => p.ParentId.Equals(permission.Id)))
+                                                            {
+                                                                <li>
+                                                                    <div class="checkbox">
+                                                                        <label>
+                                                                            <input type="checkbox" name="selectedPermissions" value="@subPermission.Id" /> @subPermission.Title
+                                                                        </label>
+                                                                    </div>
+                                                                    @if (Model.Permissions.Any(p => p.ParentId.Equals(subPermission.Id)))
+                                                                    {
+                                                                        <ul style="list-style-type:none;">
+                                                                            @foreach (var subSubPermission in Model.Permissions.Where(p => p.ParentId.Equals(subPermission.Id)))
+                                                                            {
+                                                                                <li>
+                                                                                    <div class="checkbox">
+                                                                                        <label>
+                                                                                            <input type="checkbox" name="selectedPermissions" value="@subSubPermission.Id" /> @subSubPermission.Title
+                                                                                        </label>
+                                                                                    </div>
+                                                                                </li>
+                                                                            }
+                                                                        </ul>
+                                                                    }
+                                                                </li>
+                                                            }
+                                                        </ul>
+                                                    }
+                                                </li>
+                                            }
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
-                        </form>
-                    </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <button type="submit" class="btn btn-block btn-success button-margin-10-top">ذخیره</button>
+                        </div>
+                        <div class="col-md-6">
+                            <a asp-page="/Admin/Roles/Index" class="btn btn-block btn-info button-margin-10-top">بازگشت</a>
+                        </div>
+
+                    </form>
                 </div>
                 <!-- /.row (nested) -->
             </div>

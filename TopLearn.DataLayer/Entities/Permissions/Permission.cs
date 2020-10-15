@@ -1,29 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
-using TopLearn.DataLayer.Entities.Permissions;
 
-namespace TopLearn.DataLayer.Entities.User
+namespace TopLearn.DataLayer.Entities.Permissions
 {
-    public class Role
+    public class Permission
     {
-        public Role()
-        { }
-
         public int Id { get; set; }
 
-        [Display(Name = "عنوان نقش")]
+        [Display(Name = "عنوان دسترسی")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         [MaxLength(200, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
         public string Title { get; set; }
+        public int? ParentId { get; set; }
 
-        #region Relations
-
-        public virtual List<UserRole> UserRoles { get; set; }
+        [ForeignKey("ParentId")]
+        public virtual List<Permission> Permissions { get; set; }
 
         public virtual List<RolePermission> RolePermissions { get; set; }
-
-        #endregion
     }
 }

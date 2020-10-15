@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using TopLearn.DataLayer.Entities.Mail;
+using TopLearn.DataLayer.Entities.Permissions;
 using TopLearn.DataLayer.Entities.User;
 using TopLearn.DataLayer.Entities.Wallet;
 using TopLearn.DataLayer.Extensions;
@@ -31,6 +32,14 @@ namespace TopLearn.DataLayer.Context
         #region Wallet
 
         public virtual DbSet<Transaction> Transactions { get; set; }
+
+        #endregion
+
+        #region Permission
+
+        public virtual DbSet<Permission> Permissions { get; set; }
+
+        public virtual DbSet<RolePermission> RolePermissions { get; set; }
 
         #endregion
 

@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using TopLearn.DataLayer.Entities.Mail;
+using TopLearn.DataLayer.Entities.Permissions;
 using TopLearn.DataLayer.Entities.User;
 using TopLearn.DataLayer.Entities.Wallet;
 
@@ -33,6 +34,8 @@ namespace TopLearn.DataLayer.Extensions
 
         public static void Seed(this ModelBuilder modelBuilder)
         {
+            #region MailServer
+
             modelBuilder.Entity<MailServer>()
                 .HasData(new MailServer()
                 {
@@ -42,6 +45,10 @@ namespace TopLearn.DataLayer.Extensions
                     Port = 587,
                     Host = "smtp.gmail.com"
                 });
+
+            #endregion
+
+            #region User
 
             modelBuilder.Entity<User>()
                 .HasData(new User()
@@ -55,6 +62,10 @@ namespace TopLearn.DataLayer.Extensions
                     Password = "db901737c41e490dec8bded913f112e5e7c720c3847558f0e5c65128bdb1b34c",
                     RegisterDate = DateTime.Now
                 });
+
+            #endregion
+
+            #region Transactions
 
             modelBuilder.Entity<Transaction>()
                 .HasData(new Transaction()
@@ -85,6 +96,11 @@ namespace TopLearn.DataLayer.Extensions
                     TransactionType = TransactionType.WithDraw,
                     UserId = 1
                 });
+
+            #endregion
+
+            #region Roles
+
             modelBuilder.Entity<Role>()
                 .HasData(new Role()
                 {
@@ -99,6 +115,35 @@ namespace TopLearn.DataLayer.Extensions
                     Id = 3,
                     Title = "کاربر عادی"
                 });
+
+            #endregion
+
+            #region Permissions
+
+            modelBuilder.Entity<Permission>()
+                .HasData(new Permission
+                {
+                    Id = 1,
+                    Title = "پنل مدیریت",
+                }, new Permission
+                {
+                    Id = 2,
+                    Title = "مدیریت کاربران",
+                    ParentId = 1
+                }, new Permission
+                {
+                    Id = 3,
+                    Title = "افزودن کاربر",
+                    ParentId = 2
+                }, new Permission
+                {
+                    Id = 4,
+                    Title = "ویرایش کاربر",
+                    ParentId = 2
+                });
+
+            #endregion
+
         }
     }
 }
