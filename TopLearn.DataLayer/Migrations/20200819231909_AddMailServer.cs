@@ -21,11 +21,6 @@ namespace TopLearn.DataLayer.Migrations
                 {
                     table.PrimaryKey("PK_MailServers", x => x.Id);
                 });
-
-            migrationBuilder.InsertData(
-                table: "MailServers",
-                columns: new[] { "Id", "Host", "Password", "Port", "ServerAddress" },
-                values: new object[] { 1, "smtp.gmail.com", "MASOUD7559", 587, "masoud.xpress@gmail.com" });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

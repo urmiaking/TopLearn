@@ -34,20 +34,6 @@ namespace TopLearn.DataLayer.Extensions
 
         public static void Seed(this ModelBuilder modelBuilder)
         {
-            #region MailServer
-
-            modelBuilder.Entity<MailServer>()
-                .HasData(new MailServer()
-                {
-                    Id = 1,
-                    ServerAddress = "masoud.xpress@gmail.com",
-                    Password = "MASOUD7559",
-                    Port = 587,
-                    Host = "smtp.gmail.com"
-                });
-
-            #endregion
-
             #region User
 
             modelBuilder.Entity<User>()

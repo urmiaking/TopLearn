@@ -41,16 +41,6 @@ namespace TopLearn.DataLayer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("MailServers");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Host = "smtp.gmail.com",
-                            Password = "MASOUD7559",
-                            Port = 587,
-                            ServerAddress = "masoud.xpress@gmail.com"
-                        });
                 });
 
             modelBuilder.Entity("TopLearn.DataLayer.Entities.Permissions.Permission", b =>
